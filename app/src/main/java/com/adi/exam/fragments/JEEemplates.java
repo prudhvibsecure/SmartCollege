@@ -777,11 +777,11 @@ public class JEEemplates extends ParentFragment implements View.OnClickListener,
                         return;
                     }
                     if (currentExamId == adapter.getCount()) {
-                        Toast.makeText(activity, "Are you finished your exam..", Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(activity, "Are you finished your exam..", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     if (currentExamId != -1) {
-                        question_no++;
+                        //question_no++;
                         int selRatioId = rg_options.getCheckedRadioButtonId();
 
                         if (selRatioId == -1) {
@@ -872,7 +872,6 @@ public class JEEemplates extends ParentFragment implements View.OnClickListener,
                         return;
                     }
                     if (currentExamId == adapter.getCount()) {
-                        Toast.makeText(activity, "Your exam preview is done..", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     if (currentExamId != -1) {

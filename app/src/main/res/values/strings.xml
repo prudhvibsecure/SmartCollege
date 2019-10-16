@@ -143,6 +143,8 @@
 
     <string name="questionno">Question: %1$s</string>
 
+    <string name="psas">Please Enter Answer</string>
+
     <string name="psao">Please select any options</string>
 
     <string name="date">Date: %1$s</string>

@@ -1,5 +1,6 @@
 package com.adi.exam.fragments;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.database.Cursor;
@@ -72,6 +73,8 @@ public class JEEAdvanceTemplates extends ParentFragment implements View.OnClickL
     private SriVishwa activity;
 
     private RecyclerView rv_ques_nums;
+
+    private Dialog mDialog;
 
     private QuestionNumberListingAdapter adapter;
 
@@ -776,8 +779,25 @@ public class JEEAdvanceTemplates extends ParentFragment implements View.OnClickL
                                 type_ID = ood.optString("type_id");
                             }
                         }
-                        switch (tabPosition_sub) {
-                            case 1:
+
+                        if(tabPosition_sub==0) {
+
+
+                            if (tabPosition == 0) {
+
+                                JSONObject question_details = data.getJSONObject("question_details");
+                                type_ID = table.getTypeID(question_details.optString("question_paper_id"), 1, subjectsArray[tabPosition_sub]);
+
+                            } else if (tabPosition == 1) {
+                                JSONObject question_details = data.getJSONObject("question_details");
+                                type_ID = table.getTypeID(question_details.optString("question_paper_id"), 2, subjectsArray[tabPosition_sub]);
+
+                            } else if (tabPosition == 2) {
+                                JSONObject question_details = data.getJSONObject("question_details");
+                                type_ID = table.getTypeID(question_details.optString("question_paper_id"), 3, subjectsArray[tabPosition_sub]);
+
+                            }
+                        }else if (tabPosition_sub==1) {
 
                                 if (tabPosition == 0) {
 
@@ -793,39 +813,23 @@ public class JEEAdvanceTemplates extends ParentFragment implements View.OnClickL
                                     type_ID = table.getTypeID(question_details.optString("question_paper_id"), 3, subjectsArray[tabPosition_sub]);
 
                                 }
-                                break;
-                            case 2:
-                                if (tabPosition == 0) {
 
-                                    JSONObject question_details = data.getJSONObject("question_details");
-                                    type_ID = table.getTypeID(question_details.optString("question_paper_id"), 1, subjectsArray[tabPosition_sub]);
+                        }else {
+                            if (tabPosition == 0) {
 
-                                } else if (tabPosition == 1) {
-                                    JSONObject question_details = data.getJSONObject("question_details");
-                                    type_ID = table.getTypeID(question_details.optString("question_paper_id"), 2, subjectsArray[tabPosition_sub]);
+                                JSONObject question_details = data.getJSONObject("question_details");
+                                type_ID = table.getTypeID(question_details.optString("question_paper_id"), 1, subjectsArray[tabPosition_sub]);
 
-                                } else if (tabPosition == 2) {
-                                    JSONObject question_details = data.getJSONObject("question_details");
-                                    type_ID = table.getTypeID(question_details.optString("question_paper_id"), 3, subjectsArray[tabPosition_sub]);
+                            } else if (tabPosition == 1) {
+                                JSONObject question_details = data.getJSONObject("question_details");
+                                type_ID = table.getTypeID(question_details.optString("question_paper_id"), 2, subjectsArray[tabPosition_sub]);
 
-                                }
-                                break;
-                            case 3:
-                                if (tabPosition == 0) {
+                            } else if (tabPosition == 2) {
+                                JSONObject question_details = data.getJSONObject("question_details");
+                                type_ID = table.getTypeID(question_details.optString("question_paper_id"), 3, subjectsArray[tabPosition_sub]);
 
-                                    JSONObject question_details = data.getJSONObject("question_details");
-                                    type_ID = table.getTypeID(question_details.optString("question_paper_id"), 1, subjectsArray[tabPosition_sub]);
+                            }
 
-                                } else if (tabPosition == 1) {
-                                    JSONObject question_details = data.getJSONObject("question_details");
-                                    type_ID = table.getTypeID(question_details.optString("question_paper_id"), 2, subjectsArray[tabPosition_sub]);
-
-                                } else if (tabPosition == 2) {
-                                    JSONObject question_details = data.getJSONObject("question_details");
-                                    type_ID = table.getTypeID(question_details.optString("question_paper_id"), 3, subjectsArray[tabPosition_sub]);
-
-                                }
-                                break;
                         }
                         if (currentExamId == adapter.getCount()) {
 
@@ -852,6 +856,10 @@ public class JEEAdvanceTemplates extends ParentFragment implements View.OnClickL
 
                         } else if (type_ID.equalsIgnoreCase("2")) {
 
+                            if (checkBox1.isChecked()==false&&checkBox2.isChecked()==false&&checkBox3.isChecked()==false&&checkBox4.isChecked()) {
+                                activity.showokPopUp(R.drawable.pop_ic_info, activity.getString(R.string.alert), activity.getString(R.string.psao));
+                                return;
+                            }
                             if (checkBox1.isChecked()) {
                                 Total = "a";
                             }
@@ -928,14 +936,25 @@ public class JEEAdvanceTemplates extends ParentFragment implements View.OnClickL
 
                         } else if (type_ID.equalsIgnoreCase("3")) {
 
+                            if (ed_texx.length()==0){
+                                activity.showokPopUp(R.drawable.pop_ic_info, activity.getString(R.string.alert), activity.getString(R.string.psas));
+                                return;
+                            }
+
                             jsonObject.put("qstate", 2);
 
                             jsonObject.put("qanswer", ed_texx.getText().toString().trim());
                         } else {
+                            int selRatioId = rg_options.getCheckedRadioButtonId();
+                            if (selRatioId == -1) {
 
+                                activity.showokPopUp(R.drawable.pop_ic_info, activity.getString(R.string.alert), activity.getString(R.string.psao));
+
+                                return;
+                            }
                             jsonObject.put("qstate", 2);
 
-                            jsonObject.put("qanswer", "");
+                            jsonObject.put("qanswer", layout.findViewById(selRatioId).getTag());
                         }
 
                         adapter.notifyItemChanged(currentExamId);
@@ -975,8 +994,6 @@ public class JEEAdvanceTemplates extends ParentFragment implements View.OnClickL
                         checkBox4.setChecked(false);
                     } else if (type_ID.equalsIgnoreCase("3")) {
                         ed_texx.setText("");
-                    } else {
-
                     }
 
                     jsonObject = adapter.getItems().getJSONObject(currentExamId);
@@ -1002,62 +1019,59 @@ public class JEEAdvanceTemplates extends ParentFragment implements View.OnClickL
                                 type_ID = ood.optString("type_id");
                             }
                         }
-                        switch (tabPosition_sub) {
-                            case 1:
+                        if (tabPosition_sub==0) {
 
-                                if (tabPosition == 0) {
 
-                                    JSONObject question_details = data.getJSONObject("question_details");
-                                    type_ID = table.getTypeID(question_details.optString("question_paper_id"), 1, subjectsArray[tabPosition_sub]);
+                            if (tabPosition == 0) {
 
-                                } else if (tabPosition == 1) {
-                                    JSONObject question_details = data.getJSONObject("question_details");
-                                    type_ID = table.getTypeID(question_details.optString("question_paper_id"), 2, subjectsArray[tabPosition_sub]);
+                                JSONObject question_details = data.getJSONObject("question_details");
+                                type_ID = table.getTypeID(question_details.optString("question_paper_id"), 1, subjectsArray[tabPosition_sub]);
 
-                                } else if (tabPosition == 2) {
-                                    JSONObject question_details = data.getJSONObject("question_details");
-                                    type_ID = table.getTypeID(question_details.optString("question_paper_id"), 3, subjectsArray[tabPosition_sub]);
+                            } else if (tabPosition == 1) {
+                                JSONObject question_details = data.getJSONObject("question_details");
+                                type_ID = table.getTypeID(question_details.optString("question_paper_id"), 2, subjectsArray[tabPosition_sub]);
 
-                                }
-                                break;
-                            case 2:
-                                if (tabPosition == 0) {
+                            } else if (tabPosition == 2) {
+                                JSONObject question_details = data.getJSONObject("question_details");
+                                type_ID = table.getTypeID(question_details.optString("question_paper_id"), 3, subjectsArray[tabPosition_sub]);
 
-                                    JSONObject question_details = data.getJSONObject("question_details");
-                                    type_ID = table.getTypeID(question_details.optString("question_paper_id"), 1, subjectsArray[tabPosition_sub]);
+                            }
+                        }else if (tabPosition_sub==1) {
 
-                                } else if (tabPosition == 1) {
-                                    JSONObject question_details = data.getJSONObject("question_details");
-                                    type_ID = table.getTypeID(question_details.optString("question_paper_id"), 2, subjectsArray[tabPosition_sub]);
+                            if (tabPosition == 0) {
 
-                                } else if (tabPosition == 2) {
-                                    JSONObject question_details = data.getJSONObject("question_details");
-                                    type_ID = table.getTypeID(question_details.optString("question_paper_id"), 3, subjectsArray[tabPosition_sub]);
+                                JSONObject question_details = data.getJSONObject("question_details");
+                                type_ID = table.getTypeID(question_details.optString("question_paper_id"), 1, subjectsArray[tabPosition_sub]);
 
-                                }
-                                break;
-                            case 3:
-                                if (tabPosition == 0) {
+                            } else if (tabPosition == 1) {
+                                JSONObject question_details = data.getJSONObject("question_details");
+                                type_ID = table.getTypeID(question_details.optString("question_paper_id"), 2, subjectsArray[tabPosition_sub]);
 
-                                    JSONObject question_details = data.getJSONObject("question_details");
-                                    type_ID = table.getTypeID(question_details.optString("question_paper_id"), 1, subjectsArray[tabPosition_sub]);
+                            } else if (tabPosition == 2) {
+                                JSONObject question_details = data.getJSONObject("question_details");
+                                type_ID = table.getTypeID(question_details.optString("question_paper_id"), 3, subjectsArray[tabPosition_sub]);
 
-                                } else if (tabPosition == 1) {
-                                    JSONObject question_details = data.getJSONObject("question_details");
-                                    type_ID = table.getTypeID(question_details.optString("question_paper_id"), 2, subjectsArray[tabPosition_sub]);
+                            }
 
-                                } else if (tabPosition == 2) {
-                                    JSONObject question_details = data.getJSONObject("question_details");
-                                    type_ID = table.getTypeID(question_details.optString("question_paper_id"), 3, subjectsArray[tabPosition_sub]);
+                        }else {
+                            if (tabPosition == 0) {
 
-                                }
-                                break;
+                                JSONObject question_details = data.getJSONObject("question_details");
+                                type_ID = table.getTypeID(question_details.optString("question_paper_id"), 1, subjectsArray[tabPosition_sub]);
+
+                            } else if (tabPosition == 1) {
+                                JSONObject question_details = data.getJSONObject("question_details");
+                                type_ID = table.getTypeID(question_details.optString("question_paper_id"), 2, subjectsArray[tabPosition_sub]);
+
+                            } else if (tabPosition == 2) {
+                                JSONObject question_details = data.getJSONObject("question_details");
+                                type_ID = table.getTypeID(question_details.optString("question_paper_id"), 3, subjectsArray[tabPosition_sub]);
+
+                            }
                         }
                         jsonObject = adapter.getItems().getJSONObject(currentExamId);
                         if (type_ID.equalsIgnoreCase("1")) {
                             int selRatioId = rg_options.getCheckedRadioButtonId();
-
-
                             jsonObject.put("qstate", 3);
 
                             jsonObject.put("qanswer", layout.findViewById(selRatioId).getTag());
@@ -1171,7 +1185,25 @@ public class JEEAdvanceTemplates extends ParentFragment implements View.OnClickL
                     break;
 
                 case R.id.tv_submit:
-                    showResults();
+                    mDialog = new Dialog(getActivity());
+                    mDialog.setContentView(R.layout.popup_message_ok);
+                    mDialog.show();
+                    mDialog.findViewById(R.id.tv_ok).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mDialog.dismiss();
+                            showResults();
+                        }
+                    });
+                    ((TextView) mDialog.findViewById(R.id.tv_title)).setText(R.string.nonettitle);
+                    ((TextView) mDialog.findViewById(R.id.tv_message)).setText(R.string.sbs);
+                    mDialog.findViewById(R.id.tv_cancel).setVisibility(View.VISIBLE);
+                    mDialog.findViewById(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mDialog.dismiss();
+                        }
+                    });
 
                     break;
 
