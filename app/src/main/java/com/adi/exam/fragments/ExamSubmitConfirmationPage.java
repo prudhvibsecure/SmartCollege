@@ -90,6 +90,8 @@ public class ExamSubmitConfirmationPage extends ParentFragment implements IItemH
 
         layout.findViewById(R.id.tv_yes).setOnClickListener(this);
 
+        AppPreferences.getInstance(getActivity()).addToStore("exam_on","0",true);
+
         try {
 
             if (type == 1) {

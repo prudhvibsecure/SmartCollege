@@ -132,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //  This API should accept user id. If the user entered password is correc then call be line  ---> stopLockTask();
         registerReceiver(batteryChangeReceiver, new IntentFilter(
                 Intent.ACTION_BATTERY_CHANGED));
+        AppPreferences.getInstance(this).addToStore("exam_on","0",true);
       /*  try{
             registerReceiver(apkBroadcaster, new IntentFilter(
                     "come.main.apks"));

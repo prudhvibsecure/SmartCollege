@@ -462,6 +462,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/button_bg_cancel"
                             android:hint="Answer"
+                            android:imeOptions="actionDone"
                             android:inputType="number|numberDecimal|numberSigned"
                             android:padding="8dp" />
                     </LinearLayout>

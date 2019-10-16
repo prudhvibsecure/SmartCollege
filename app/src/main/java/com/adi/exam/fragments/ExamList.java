@@ -27,6 +27,7 @@ import com.adi.exam.R;
 import com.adi.exam.SriVishwa;
 import com.adi.exam.adapters.ExamContentListingAdapter;
 import com.adi.exam.callbacks.IItemHandler;
+import com.adi.exam.common.AppPreferences;
 import com.adi.exam.database.App_Table;
 import com.adi.exam.database.Database;
 import com.adi.exam.database.PhoneComponent;
@@ -211,6 +212,8 @@ public class ExamList extends ParentFragment implements View.OnClickListener, II
             switch (view.getId()) {
 
                 case R.id.tv_startexam:
+
+                    AppPreferences.getInstance(getActivity()).addToStore("exam_on","1",true);
                     JSONObject jsonObject1 = adapterContent.getItems().getJSONObject((int) view.getTag());
                     App_Table table = new App_Table(activity);
 

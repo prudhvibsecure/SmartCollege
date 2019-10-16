@@ -759,7 +759,7 @@ public class ExamTemplates extends ParentFragment implements View.OnClickListene
                 case R.id.tv_mfrn:
 
                     if (currentExamId == adapter.getCount()) {
-                        Toast.makeText(activity, "Your exam preview is done..", Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(activity, "Your exam preview is done..", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     if (currentExamId != -1) {

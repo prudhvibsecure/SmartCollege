@@ -51,14 +51,14 @@ public class DNotifyCloser extends Service {
                     String exam_process= AppPreferences.getInstance(ctx).getFromStore("exam_on");
                     if (exam_process.startsWith("0")) {
                         handleKioskMode();
-                       // safeMode();
+                        try{
+                            sendBroadcast(new Intent("android.intent.action.CLOSE_SYSTEM_DIALOGS"));
+                            Thread.sleep(INTERVAL);
+                        }  catch (Exception e){
+                            e.printStackTrace();
+                        }
+                        // safeMode();
                     }
-                 try{
-                    sendBroadcast(new Intent("android.intent.action.CLOSE_SYSTEM_DIALOGS"));
-                     Thread.sleep(INTERVAL);
-                 }  catch (Exception e){
-                     e.printStackTrace();
-                 }
 
                 } while (running);
                 stopSelf();
